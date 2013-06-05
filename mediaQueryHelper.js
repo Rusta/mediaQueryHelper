@@ -89,8 +89,8 @@ ddo.getDimensions = function(){
 	}
 
 	// update our dimension display div with the captured dimensions
-	$('#dimensionDisplayWidth').html(windowWidth);
-	$('#dimensionDisplayHeight').html(windowHeight);
+	document.getElementById('dimensionDisplayWidth').innerHTML=windowWidth;
+	document.getElementById('dimensionDisplayHeight').innerHTML=windowHeight;
 
 }; // ddo.getDimensions end function
 
@@ -99,15 +99,9 @@ ddo.getDimensions = function(){
 ddo.initialiseDimensionsDisplay = function(){
 
 	// we check for/add a class to the body to confirm to ensure we only add the dimension display div once
-
-
-    console.log( document.body.classList.contains('dimensionDisplayAdded') )
-
-	if(!$('body').hasClass('dimensionDisplayAdded'))
+	if( !document.body.classList.contains('dimensionDisplayAdded') )
 	{
-		$('body').addClass('dimensionDisplayAdded');
-
-		console.log( document.body.classList.contains('dimensionDisplayAdded') )
+		document.body.classList.add('dimensionDisplayAdded')
 
 		// the html for our dimension display div
 		var dimensionDisplayHTML = '<div id="dimensionDisplay">Width: <span id="dimensionDisplayWidth"></span><br>Height: <span id="dimensionDisplayHeight"></span></div>';
