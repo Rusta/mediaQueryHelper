@@ -1,0 +1,162 @@
+html, body { 
+	/* limit the html and body to width and height of viewport - to stop sections from overlapping */
+	width:100%; 
+	height:100%; 
+}
+
+header {
+	/* add a sticky always on top header  */
+	width: 100%;
+	height: 50px;
+	background-color: white;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 999;
+}
+.logo {
+	float: left;
+}
+
+.logo-text {
+	color: white;
+	padding: 18px 10px 0px 10px;
+}
+
+nav, .nav-link {
+	cursor: pointer;
+	text-decoration: none;
+}
+nav#inline {
+	float: left;
+	min-height: 50px;
+	z-index: 999;
+}
+nav#inline ul {
+	margin-top: 10px;
+	margin-left: 10px;
+	list-style: none;
+}
+nav#inline li {
+	float: left;
+	padding: 4px 4px 8px 8px;
+	margin-right: 10px;
+}
+nav a {
+	color: #064c73;
+	text-decoration: none;	
+}
+nav#dropdown-btn {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	display: none;
+}
+nav#dropdown {
+	position: fixed;
+	background-color: white;
+	width: 100%;
+	z-index: 998;
+	top: 50px;
+	display: none;
+}
+nav#dropdown ul {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+nav#dropdown li {
+	margin-bottom: 10px;
+}
+
+
+section { 
+	/* set each section to be at least as tall and wide as the current viewport */
+	width:100%; 
+	height:100%; 
+	/* anything that tries to overflow from our section will not be displayed */
+	overflow: hidden; 
+	/* set a minimum height for our pages so that the content doesn't vanish if the viewport is less than 700px */
+	min-height: 750px; 
+}
+
+/* SECTION SPECIFIC STYLES */
+/*
+section#one { 
+	background-color: red; 
+}
+section#two { 
+	background-color: green; 
+}
+section#three { 
+	background-color: blue; 
+}
+section#four { 
+	background-color: yellow; 
+}
+*/
+.central-colmun {
+	/* controls the width of the core centralised column - adjusted with media queries */
+	width: 1024px;
+	margin: 0 auto;
+	position: relative;
+}
+
+article {
+	/* pad the top of an article by an extra 50px to account for the fixed nav header */
+	padding: 70px 20px 20px 20px;
+	height: 100%;
+}
+
+
+
+
+/* MEDIA QUERIES */
+
+@media (max-width: 1100px){
+	.central-colmun {
+		width: 900px;
+	}	
+} 
+
+@media (max-width: 950px){
+	.central-colmun {
+		width: 750px;
+	}	
+} 
+
+@media (max-width: 750px){
+	.central-colmun {
+		width: 100%;
+	}	
+} 
+
+
+/* NAVIGATION BREAKPOINT */
+/* SET THE MAX WIDTH BASED ON HOW MANY SECTIONS YOU HAVE / THE LENGTH OF THE NAV LINK NAMES */
+/* THAT IS: SWITCH TO DROP DOWN NAV BEFORE THEY HIT THE SIDE OF THE PAGE! */
+
+@media (max-width: 450px){
+	nav#inline {
+		display: none;
+	}	
+	nav#dropdown-btn {
+		display: block;
+	}	
+
+	/* if no javascript then hide drop-down btn & display dropdown menu at top of screen */
+	.no-js nav#dropdown-btn {
+		display: none;
+	}	
+	.no-js nav#dropdown {
+		display: block;
+		position: absolute;
+	}		
+	/* add extra padding to top of first section and article to account for absolute positioned dropdown menu */	
+	.no-js section#one {
+		margin-top: 200px;
+	}
+	.no-js article {
+		padding-top: 70px;
+	}	
+
+} 
