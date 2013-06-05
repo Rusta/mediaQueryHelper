@@ -32,7 +32,7 @@ ddo.addJqueryUI = function(){
 ddo.checkForLibraryReadiness = function(){	
 
 	// if jQuery exists then set relevant param to true
-	if (window.jQuery) { ddo.jQuery = true };
+	if (window.jQuery) { ddo.jQuery = true; clearInterval(ddo.loadLibraryTimer); };
 
 	// if jQuery doesn't exist and is not currently loading then add it
 	if (!ddo.jQuery && !ddo.jQueryLoading)
@@ -50,6 +50,7 @@ ddo.checkForLibraryReadiness = function(){
 		// if jQueryUI exists then set param to true and inialise the dimension display (finally)!
 		if (window.jQuery.ui) { 
 							ddo.jQueryUI = true; 
+							clearInterval(ddo.loadLibraryTimer);
 							ddo.initialiseDimensionsDisplay();
 						};
 
