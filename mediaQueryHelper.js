@@ -1,72 +1,6 @@
 // create 'display dimensons object' in an attempt to not pollute the global namespace
 var ddo = {};
 
-// variables to capture dependent libraries status
-ddo.jQuery = false;
-ddo.jQueryLoading = false;
-ddo.jQueryUILoading = false;
-ddo.loadLibraryTimer;
-
-// add jQuery library script tag to header
-ddo.addJquery = function(){
-		// set loading param so we do not add more than once
-		ddo.jQueryLoading = true;
-		var script   = document.createElement("script");
-		script.type  = "text/javascript";
-		script.src = "//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js";     
-		document.getElementsByTagName('head')[0].appendChild(script);
-}; // end ddo.addJquery function
-
-// add jQuery UI library script tag to header
-ddo.addJqueryUI = function(){
-		// set loading param so we do not add more than once
-		ddo.jQueryUILoading = true;
-	    var script   = document.createElement("script");
-	    script.type  = "text/javascript";
-	    script.src = "//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js";     
-	    document.getElementsByTagName('head')[0].appendChild(script);	
-}; // end ddo.addJqueryUI function
-
-// check if our dependent libraries are loaded and then initiate our code when they are available
-// nb. this code polls for readiness of first jQuery and then jQuery UI (which has a dependency itself on jQuery) 
-// and only initialises are main code when both external library methods exist
-ddo.checkForLibraryReadiness = function(){	
-
-	// if jQuery exists then set relevant param to true
-	if (window.jQuery) { ddo.jQuery = true; clearInterval(ddo.loadLibraryTimer); };
-
-	// if jQuery doesn't exist and is not currently loading then add it
-	if (!ddo.jQuery && !ddo.jQueryLoading)
-	{
-		// jQuery doesn't exist and is not already loading so we need to add it
-		ddo.addJquery();
-		// run this function again in half a second to check the status of library load
-		clearInterval(ddo.loadLibraryTimer);
-		ddo.loadLibraryTimer = setInterval( ddo.checkForLibraryReadiness, 500 );
-	}
-
-	// jQuery does exist so test for jQuery UI
-	if (ddo.jQuery)
-	{ 
-		// if jQueryUI exists then set param to true and inialise the dimension display (finally)!
-		if (window.jQuery.ui) { 
-							ddo.jQueryUI = true; 
-							clearInterval(ddo.loadLibraryTimer);
-							ddo.initialiseDimensionsDisplay();
-						};
-
-		if(!ddo.jQueryUI && !ddo.jQueryUILoading)
-		{
-			// jQuery UI doesn't exist and is not already loading so we need to add it
-			ddo.addJqueryUI();
-			// run this function again in half a second to check the status of library load
-			clearInterval(ddo.loadLibraryTimer);
-			ddo.loadLibraryTimer = setInterval( ddo.checkForLibraryReadiness, 500 );		
-		}
-
-	}
-}; // end ddo.checkForLibraryReadiness function
-
 // get current page dimensions
 ddo.getDimensions = function(){
 
@@ -93,7 +27,6 @@ ddo.getDimensions = function(){
 	document.getElementById('dimensionDisplayHeight').innerHTML=windowHeight;
 
 }; // ddo.getDimensions end function
-
 
 // Add Dimension Display to page
 ddo.initialiseDimensionsDisplay = function(){
@@ -150,14 +83,61 @@ ddo.initialiseDimensionsDisplay = function(){
 		}, 500);
 
 		// make the dimension display div draggable
-		$('#dimensionDisplay').draggable();
-
+		// $('#dimensionDisplay').draggable();
+		// add mouse down/up event listeners
+		dimensionDisplayDiv.addEventListener('mousedown', ddo.mousedown, false);
+		window.addEventListener('mouseup', ddo.mouseup, false);
+		
 		// Update Dimension Display upon resize of page
-		$(window).resize(function() {
-			ddo.getDimensions();
-		});		
+		window.onresize = function(event) {
+		    ddo.getDimensions();
+		}
+
 	}	
 } // end ddo.initialiseDimensionsDisplay function
 
-// get things started by check for Library Readiness
-ddo.checkForLibraryReadiness();
+ddo.mousedown = function(e){ 
+	window.addEventListener('mousemove', ddo.dragDiv, true);
+	// prevent default event in order to disable page text selection when dragging
+	e.preventDefault();
+	// capture our initial mouse position on mousedown
+	ddo.dragStartX = e.clientX;
+	ddo.dragStartY = e.clientY;
+	// capture our initial div position on mousedown (to apply relative dragging offset)
+	ddo.divStartX = ddo.getOffset( document.getElementById('dimensionDisplay') ).left;
+	ddo.divStartY = ddo.getOffset( document.getElementById('dimensionDisplay') ).top;	
+};
+
+ddo.mouseup = function(e){ 
+	// mouseup is on the window object
+	window.removeEventListener('mousemove', ddo.dragDiv, true);
+	e.preventDefault();
+};
+
+ddo.dragDiv = function(e){ 
+	// subtract the difference between drag start position and current mouse position from our div position
+	var divDragX = ddo.divStartX - (ddo.dragStartX - e.clientX);
+	var divDragY = ddo.divStartY - (ddo.dragStartY - e.clientY);
+	// apply the new position coordinates to our div
+	var div = document.getElementById('dimensionDisplay');
+	div.style.left = divDragX  + 'px';
+  	div.style.top = divDragY + 'px';	
+};
+
+// generic function for getting an elements top and left offset coordinates
+ddo.getOffset = function( el ) {
+    var _x = 0;
+    var _y = 0;
+    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+
+// get the ball rolling
+ddo.initialiseDimensionsDisplay();
+
+
+
