@@ -82,16 +82,17 @@ ddo.initialiseDimensionsDisplay = function(){
 		}, 500);
 
 		// make the dimension display div draggable
-		// $('#dimensionDisplay').draggable();
-		// add mouse down/up event listeners
+
+		// add mouse event listeners
 		dimensionDisplayDiv.addEventListener('mousedown', ddo.mousedown, false);
 		window.addEventListener('mouseup', ddo.mouseup, false);
+
+		// ToDo : add touch event listeners
 		
 		// Update Dimension Display upon resize of page
 		window.onresize = function(event) {
 		    ddo.getDimensions();
 		}
-
 	}	
 } // end initialiseDimensionsDisplay function
 
