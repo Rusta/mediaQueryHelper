@@ -1,5 +1,6 @@
 // create 'display dimensons object' in an attempt to not pollute the global namespace
 var ddo = {};
+
 // variables to capture dependent libraries status
 ddo.jQuery = false;
 ddo.jQueryLoading = false;
@@ -73,15 +74,15 @@ ddo.getDimensions = function(){
 
 	// different browsers show the width/height in different ways... the below should cover all of them 
 	if( typeof( window.innerWidth ) == 'number' ) {
-		/* webkit */
+		// Modern Browsers
 		windowWidth = window.innerWidth;
 		windowHeight = window.innerHeight;
 	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-		/* newer IE */
+		// IE
 		windowWidth = document.documentElement.clientWidth;
 		windowHeight = document.documentElement.clientHeight;
 	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-		/* ancient IE */
+		// ancient IE
 		windowWidth = document.body.clientWidth;
 		windowHeight = document.body.clientHeight;
 	}
@@ -91,6 +92,7 @@ ddo.getDimensions = function(){
 	$('#dimensionDisplayHeight').html(windowHeight);
 
 }; // ddo.getDimensions end function
+
 
 // Add Dimension Display to page
 ddo.initialiseDimensionsDisplay = function(){
@@ -102,16 +104,51 @@ ddo.initialiseDimensionsDisplay = function(){
 		// the html for our dimension display div
 		var dimensionDisplayHTML = '<div id="dimensionDisplay">Width: <span id="dimensionDisplayWidth"></span><br>Height: <span id="dimensionDisplayHeight"></span></div>';
 		// the CSS for our dimension display div
-		var dimensionDisplayCSS = '<style> #dimensionDisplay { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; position: fixed; top: 5px; left: 5px; height: auto; width: auto; z-index: 999999; background: rgb(54, 25, 25); background: rgba(54, 25, 25, .4); border-radius: 5px; color: white; padding: 5px; cursor: move; display: none; font-size: 80%; } </style>';
+		var dimensionDisplayCSS = 	'<style> ' +
+									'	#dimensionDisplay ' +
+									'	{' +
+									'		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; ' +
+									'		position: fixed; ' +
+									'		top: 5px; ' +
+									'		left: 5px; ' +
+									'		height: auto; ' +
+									'		width: auto; ' +
+									'		z-index: 999999; ' +
+									'		background: rgb(54, 25, 25); ' +
+									'		background: rgba(54, 25, 25, .4); ' +
+									'		border-radius: 5px; ' +
+									'		color: white; ' +
+									'		padding: 5px; ' +
+									'		cursor: move; ' +
+									'		opacity:0; ' +									
+									'		font-size: 80%; ' +
+									'		-webkit-transition: background 1s ease; ' +
+									'		transition: background 1s ease; ' +
+									'		-webkit-transition: opacity 1s ease; ' +
+									'		transition: opacity 1s ease; ' +
+									'	}' +
+									'	#dimensionDisplay:hover { ' +
+									'		background: rgba(54, 25, 25, 0.7); ' +
+									'	}' +
+									'	#dimensionDisplay.fadeIn { ' +
+									'		opacity: 1; ' +
+									'	}' +									
+									'</style>';
 
-		// prepend both the anove HTML and CSS to the document body
-		$('body').prepend(dimensionDisplayHTML);	
-		$('body').prepend(dimensionDisplayCSS);	
+		// append the above HTML and CSS to the document body
+		var div = document.createElement('div');
+		div.innerHTML = dimensionDisplayHTML + dimensionDisplayCSS;
+		document.body.appendChild(div);
 
 		// call the getDimensions function
 		ddo.getDimensions();
+
 		// fade in the dimension display
-		$('#dimensionDisplay').fadeIn();
+		var dimensionDisplayDiv = document.getElementById('dimensionDisplay');
+		setTimeout(function() {
+    		dimensionDisplayDiv.classList.add("fadeIn");
+		}, 500);
+
 		// make the dimension display div draggable
 		$('#dimensionDisplay').draggable();
 
