@@ -25,8 +25,7 @@ ddo.getDimensions = function(){
 	// update our dimension display div with the captured dimensions
 	document.getElementById('dimensionDisplayWidth').innerHTML=windowWidth;
 	document.getElementById('dimensionDisplayHeight').innerHTML=windowHeight;
-
-}; // ddo.getDimensions end function
+}; // getDimensions end function
 
 // Add Dimension Display to page
 ddo.initialiseDimensionsDisplay = function(){
@@ -94,7 +93,7 @@ ddo.initialiseDimensionsDisplay = function(){
 		}
 
 	}	
-} // end ddo.initialiseDimensionsDisplay function
+} // end initialiseDimensionsDisplay function
 
 ddo.mousedown = function(e){ 
 	window.addEventListener('mousemove', ddo.dragDiv, true);
@@ -106,13 +105,13 @@ ddo.mousedown = function(e){
 	// capture our initial div position on mousedown (to apply relative dragging offset)
 	ddo.divStartX = ddo.getOffset( document.getElementById('dimensionDisplay') ).left;
 	ddo.divStartY = ddo.getOffset( document.getElementById('dimensionDisplay') ).top;	
-};
+}; // end mousedown function
 
 ddo.mouseup = function(e){ 
 	// mouseup is on the window object
 	window.removeEventListener('mousemove', ddo.dragDiv, true);
 	e.preventDefault();
-};
+}; // end mouseup function
 
 ddo.dragDiv = function(e){ 
 	// subtract the difference between drag start position and current mouse position from our div position
@@ -122,7 +121,7 @@ ddo.dragDiv = function(e){
 	var div = document.getElementById('dimensionDisplay');
 	div.style.left = divDragX  + 'px';
   	div.style.top = divDragY + 'px';	
-};
+}; // end dragDiv function
 
 // generic function for getting an elements top and left offset coordinates
 ddo.getOffset = function( el ) {
@@ -134,7 +133,7 @@ ddo.getOffset = function( el ) {
         el = el.offsetParent;
     }
     return { top: _y, left: _x };
-}
+} // end getOffset function
 
 // get the ball rolling
 ddo.initialiseDimensionsDisplay();
