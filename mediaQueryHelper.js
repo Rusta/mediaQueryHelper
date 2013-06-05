@@ -99,7 +99,9 @@ ddo.initialiseDimensionsDisplay = function(){
 } // end initialiseDimensionsDisplay function
 
 ddo.mousedown = function(e){ 
-	window.addEventListener('mousemove', ddo.dragDiv(e, 'mouse'), true);
+	// set action type
+	ddo.actionType = 'mouse';
+	window.addEventListener('mousemove', ddo.dragDiv, true);
 	// prevent default event in order to disable page text selection when dragging
 	e.preventDefault();
 	// capture our initial mouse position on mousedown
@@ -110,68 +112,42 @@ ddo.mousedown = function(e){
 	ddo.divStartY = ddo.getOffset( document.getElementById('dimensionDisplay') ).top;	
 }; // end mousedown function
 
-var debugCount = 0;
-
 ddo.touchstart = function(e){ 
-	window.addEventListener('touchmove', ddo.dragDiv(e, 'touch'), true);
-	// 
-	/*
-	window.addEventListener('touchmove', function(){ 
-
-		// alert('test'); 
-		debugCount += 1;
-		document.getElementById('debug').innerHTML='Debug Count: ' + debugCount;
-
-	}, true);
-*/
-
-		//debugCount += 1;
-		//document.getElementById('debug').innerHTML='Debug Count: ' + debugCount;
-
+	window.addEventListener('touchmove', ddo.dragDiv, true);
 	// prevent default event in order to disable page text selection when dragging	
 	e.preventDefault();
 	// capture our initial mouse position on mousedown
 	ddo.dragStartX = e.touches[0].pageX;
 	ddo.dragStartY = e.touches[0].pageY;
-
-	console.log('touchStart');
-
-
-
-	console.log(ddo.dragStartX);
-	console.log(ddo.dragStartXY);
-
 	// capture our initial div position on mousedown (to apply relative dragging offset)
 	ddo.divStartX = ddo.getOffset( document.getElementById('dimensionDisplay') ).left;
 	ddo.divStartY = ddo.getOffset( document.getElementById('dimensionDisplay') ).top;	
-
 }; // end touchstart function
 
 ddo.mouseup = function(e){ 
-	// mouseup is on the window object
-	window.removeEventListener('mousemove', ddo.dragDiv(e, 'mouse'), true);
+	// mouseup on the window object
+	window.removeEventListener('mousemove', ddo.dragDiv, true);
 	e.preventDefault();
 }; // end mouseup function
 
 ddo.touchend = function(e){ 
-	// mouseup is on the window object
+	// touchend on the window object
 	window.removeEventListener('touchmove', ddo.dragDiv, true);
 	e.preventDefault();
 }; // end mouseup function
 
 ddo.dragDiv = function(e, type){ 
-	// subtract the difference between drag start position and current mouse position from our div position
-	if (type == 'mouse')
+	// subtract the difference between drag start position and current mouse/touch position from our div position
+	// based on either mouse OR touch-end position
+	if ( ddo.actionType == 'mouse')
 	{
 		var divDragX = ddo.divStartX - (ddo.dragStartX - e.clientX);
-		var divDragY = ddo.divStartY - (ddo.dragStartY - e.clientY);
-		console.log('drag Mouse');		
+		var divDragY = ddo.divStartY - (ddo.dragStartY - e.clientY);	
 	}
 	else
 	{
 		var divDragX = ddo.divStartX - (ddo.dragStartX - e.touches[0].pageX);
-		var divDragY = ddo.divStartY - (ddo.dragStartY - e.touches[0].pageY);	
-		console.log('drag Other');			
+		var divDragY = ddo.divStartY - (ddo.dragStartY - e.touches[0].pageY);			
 	}
 	// apply the new position coordinates to our div
 	var div = document.getElementById('dimensionDisplay');
