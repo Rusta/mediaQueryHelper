@@ -81,15 +81,18 @@ ddo.initialiseDimensionsDisplay = function(){
     		dimensionDisplayDiv.classList.add("fadeIn");
 		}, 500);
 
-		// make the dimension display div draggable
 
-		// add mouse event listeners
+		// make the dimension display div draggable for MOUSE and TOUCH events
+
+		// add mousedown event listener on our div
 		dimensionDisplayDiv.addEventListener('mousedown', ddo.mousedown, false);
+		// call mouseup event listener (on window)
 		window.addEventListener('mouseup', ddo.mouseup, false);
 
-		// ToDo : add touch event listeners
+		// add touchstart event listener on our div
 		dimensionDisplayDiv.addEventListener('touchstart', ddo.touchstart, false);
-		window.addEventListener('touchend', ddo.mouseup, false);
+		// call touchend event listener (on window)
+		window.addEventListener('touchend', ddo.touchend, false);
 		
 		// Update Dimension Display upon resize of page
 		window.onresize = function(event) {
@@ -101,6 +104,7 @@ ddo.initialiseDimensionsDisplay = function(){
 ddo.mousedown = function(e){ 
 	// set action type
 	ddo.actionType = 'mouse';
+	// add mousemove event listener to capture movement
 	window.addEventListener('mousemove', ddo.dragDiv, true);
 	// prevent default event in order to disable page text selection when dragging
 	e.preventDefault();
@@ -113,25 +117,28 @@ ddo.mousedown = function(e){
 }; // end mousedown function
 
 ddo.touchstart = function(e){ 
+	// set action type
+	ddo.actionType = 'touch';	
+	// add touchmove event listener to capture movement
 	window.addEventListener('touchmove', ddo.dragDiv, true);
 	// prevent default event in order to disable page text selection when dragging	
 	e.preventDefault();
-	// capture our initial mouse position on mousedown
+	// capture our initial touch position on touchstart
 	ddo.dragStartX = e.touches[0].pageX;
 	ddo.dragStartY = e.touches[0].pageY;
-	// capture our initial div position on mousedown (to apply relative dragging offset)
+	// capture our initial div position on touchstart (to apply relative dragging offset)
 	ddo.divStartX = ddo.getOffset( document.getElementById('dimensionDisplay') ).left;
 	ddo.divStartY = ddo.getOffset( document.getElementById('dimensionDisplay') ).top;	
 }; // end touchstart function
 
 ddo.mouseup = function(e){ 
-	// mouseup on the window object
+	// remove mousemove listener from the window object
 	window.removeEventListener('mousemove', ddo.dragDiv, true);
 	e.preventDefault();
 }; // end mouseup function
 
 ddo.touchend = function(e){ 
-	// touchend on the window object
+	// remove touchmove listener from the window object
 	window.removeEventListener('touchmove', ddo.dragDiv, true);
 	e.preventDefault();
 }; // end mouseup function
