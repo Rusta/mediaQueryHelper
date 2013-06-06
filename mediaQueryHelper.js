@@ -7,23 +7,20 @@ ddo.getDimensions = function(){
 	var windowWidth = 0;
 	var windowHeight = 0;
 
-	// different browsers show the width/height in different ways... the below should cover all of them 
-	if( typeof( window.innerWidth ) == 'number' ) {
+	if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
 		// Modern Browsers
-		windowWidth = window.innerWidth;
-		windowHeight = window.innerHeight;
-	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-		// IE
 		windowWidth = document.documentElement.clientWidth;
 		windowHeight = document.documentElement.clientHeight;
 	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-		// ancient IE
+		// Older Browsers
 		windowWidth = document.body.clientWidth;
 		windowHeight = document.body.clientHeight;
 	}
 
 	// update our dimension display div with the captured dimensions
 	document.getElementById('dimensionDisplayWidth').innerHTML=windowWidth;
+
+	console.log(window);
 	document.getElementById('dimensionDisplayHeight').innerHTML=windowHeight;
 }; // getDimensions end function
 
@@ -89,10 +86,12 @@ ddo.initialiseDimensionsDisplay = function(){
 		// call mouseup event listener (on window)
 		window.addEventListener('mouseup', ddo.mouseup, false);
 
+		/* COMMENT OUT TOUCH EVENTS 
 		// add touchstart event listener on our div
 		dimensionDisplayDiv.addEventListener('touchstart', ddo.touchstart, false);
 		// call touchend event listener (on window)
 		window.addEventListener('touchend', ddo.touchend, false);
+		*/
 		
 		// Update Dimension Display upon resize of page
 		window.onresize = function(event) {
