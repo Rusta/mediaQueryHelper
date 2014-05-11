@@ -20,8 +20,6 @@ ddo.getDimensions = function(){
 	// update our dimension display div with the captured dimensions
 	document.getElementById('dimensionDisplayWidth').innerHTML=windowWidth;
 
-	console.log(window);
-	document.getElementById('dimensionDisplayHeight').innerHTML=windowHeight;
 }; // getDimensions end function
 
 // Add Dimension Display to page
