@@ -7,7 +7,7 @@ I built it to help me find and test breakpoints when trying to create media quer
 
 ## Demo
 
-<a href="https://appasylum.net/resources/mediaQueryHelper/" target="_blank">Link to Demo</a>
+<a href="http://appasylum.net/resources/mediaQueryHelper/" target="_blank">Link to Demo</a>
 
 Features:
 
